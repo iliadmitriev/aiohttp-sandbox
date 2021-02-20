@@ -1,6 +1,5 @@
 from aiohttp.web import View
 from aiohttp import web
-import json
 
 
 class IndexView(View):
@@ -18,18 +17,8 @@ class IndexView(View):
                 description: json response with  `status`
         """
         response_obj = {
-            'status': 'success'
+            'status': 'success',
+            'headers': str(self.request.headers)
         }
-        headers = {
-            'content-type': 'application/json'
-        }
-        return web.Response(
-            text=json.dumps(
-                response_obj,
-                sort_keys=True,
-                indent=4
-            ),
-            status=200,
-            headers=headers
-        )
+        return web.json_response(response_obj)
 
