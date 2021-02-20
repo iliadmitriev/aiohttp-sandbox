@@ -1,7 +1,7 @@
-from views.Render import RenderView
-from views.Index import IndexView
-from views.Ping import PingView
-from views.Jinja import JinjaView
+from views.render import RenderView
+from views.index import IndexView
+from views.ping import PingView
+from views.jinja import JinjaView
 
 
 def setup_routes(app):
