@@ -18,5 +18,8 @@ class ProfileSchema(Schema):
     ),
     avatar = fields.URL(required=False)
 
+    class Meta:
+        strict = True
+
 
 profile_schema = ProfileSchema()
