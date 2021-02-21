@@ -5,7 +5,7 @@ source venv/bin/activate
 ```
 2. modules
 ```shell
-pip install aiohttp aiohttp-jinja2 aiohttp-swagger
+pip install aiohttp aiohttp-jinja2 aiohttp-swagger aiopg sqlalchemy
 ```
 3. run
 ```shell
