@@ -29,7 +29,10 @@ class ProfilesDetailView(web.View):
 
     async def patch(self):
         async with self.request.app['db'].acquire() as conn:
-            data = await self.request.post()
+            if self.request.content_type == 'application/json':
+                data = await self.request.json()
+            else:
+                data = await self.request.post()
             profile_id = self.request.match_info['profile_id']
             profile = await update_object_by_id(conn, Profile, profile_id, data)
             return web.json_response(dict(profile))
