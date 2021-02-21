@@ -1,7 +1,13 @@
 from aiohttp import web
 from models import Profile
 from schemas import profile_schema
-from db import get_objects, get_object_by_id, update_object_by_id, insert_object
+from db import (
+    get_objects,
+    get_object_by_id,
+    update_object_by_id,
+    insert_object,
+    delete_object_by_id
+)
 
 
 class ProfilesListView(web.View):
@@ -20,7 +26,7 @@ class ProfilesListView(web.View):
             validated_data = profile_schema.load(data)
             profile = await insert_object(conn, Profile, validated_data)
             result = profile_schema.dump(profile)
-            return web.json_response(result)
+            return web.json_response(result, status=201)
 
 
 class ProfilesDetailView(web.View):
@@ -39,5 +45,12 @@ class ProfilesDetailView(web.View):
                 data = await self.request.post()
             profile_id = self.request.match_info['profile_id']
             profile = await update_object_by_id(conn, Profile, profile_id, data)
+            result = profile_schema.dump(profile)
+            return web.json_response(result)
+
+    async def delete(self):
+        async with self.request.app['db'].acquire() as conn:
+            profile_id = self.request.match_info['profile_id']
+            profile = await delete_object_by_id(conn, Profile, profile_id)
             result = profile_schema.dump(profile)
             return web.json_response(result)

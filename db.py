@@ -54,6 +54,21 @@ async def update_object_by_id(conn, obj, pk, values):
     return record
 
 
+async def delete_object_by_id(conn, obj, pk):
+    try:
+        result = await conn.execute(
+            delete(obj)
+            .where(obj.id == pk)
+            .returning(*obj.__table__.columns)
+        )
+        record = await result.first()
+    except CompileError as e:
+        raise BadRequest(str(e))
+    if not record:
+        raise RecordNotFound(f'{obj.__name__} with id={pk} is not found')
+    return record
+
+
 async def insert_object(conn, obj, values):
     try:
         result = await conn.execute(
