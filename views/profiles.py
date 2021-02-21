@@ -44,7 +44,7 @@ class ProfilesDetailView(web.View):
             else:
                 data = await self.request.post()
             profile_id = self.request.match_info['profile_id']
-            validated_date = profile_schema.load(data)
+            validated_date = profile_schema.load(data, partial=True)
             profile = await update_object_by_id(conn, Profile, profile_id, validated_date)
             result = profile_schema.dump(profile)
             return web.json_response(result)
