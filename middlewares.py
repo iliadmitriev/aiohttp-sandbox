@@ -2,6 +2,7 @@ from aiohttp.web_middlewares import middleware
 from aiohttp import web
 from exceptions import BadRequest, RecordNotFound
 from json import JSONDecodeError
+from marshmallow import ValidationError
 
 
 async def handle_http_error(request, e, status):
@@ -14,7 +15,7 @@ async def error_middleware(request, handler):
         return await handler(request)
     except web.HTTPException as e:
         return await handle_http_error(request, str(e), status=e.status)
-    except (BadRequest, JSONDecodeError) as e:
+    except (BadRequest, JSONDecodeError, ValidationError) as e:
         return await handle_http_error(request, str(e), status=400)
     except RecordNotFound as e:
         return await handle_http_error(request, str(e), status=404)
