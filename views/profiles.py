@@ -37,17 +37,23 @@ class ProfilesDetailView(web.View):
             result = profile_schema.dump(profile)
             return web.json_response(result)
 
-    async def patch(self):
+    async def update(self, partial):
         async with self.request.app['db'].acquire() as conn:
             if self.request.content_type == 'application/json':
                 data = await self.request.json()
             else:
                 data = await self.request.post()
             profile_id = self.request.match_info['profile_id']
-            validated_date = profile_schema.load(data, partial=True)
+            validated_date = profile_schema.load(data, partial=partial)
             profile = await update_object_by_id(conn, Profile, profile_id, validated_date)
             result = profile_schema.dump(profile)
             return web.json_response(result)
+
+    async def put(self):
+        return await self.update(partial=False)
+
+    async def patch(self):
+        return await self.update(partial=True)
 
     async def delete(self):
         async with self.request.app['db'].acquire() as conn:
