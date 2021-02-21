@@ -18,7 +18,7 @@ class ProfileSchema(Schema):
     gender = fields.String(
         required=False,
         validate=validate.OneOf(choices=GENDERS)
-    ),
+    )
     avatar = fields.URL(required=False)
 
     class Meta:
