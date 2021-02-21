@@ -8,7 +8,10 @@ GENDERS = [MALE, FEMALE]
 
 class ProfileSchema(Schema):
     id = fields.Integer(dump_only=True)
-    firstname = fields.String(required=False)
+    firstname = fields.String(
+        required=False,
+        validate=validate.Length(max=100)
+    )
     surname = fields.String(required=False)
     user_id = fields.Integer(required=True)
     birthdate = fields.Date(required=False)
