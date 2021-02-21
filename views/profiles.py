@@ -12,7 +12,10 @@ class ProfilesListView(web.View):
 
     async def post(self):
         async with self.request.app['db'].acquire() as conn:
-            data = await self.request.post()
+            if self.request.content_type == 'application/json':
+                data = await self.request.json()
+            else:
+                data = await self.request.post()
             profile = await insert_object(conn, Profile, data)
             return web.json_response(dict(profile))
 
