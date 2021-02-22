@@ -18,7 +18,7 @@ class IndexView(View):
         """
         response_obj = {
             'status': 'success',
-            'headers': str(self.request.headers)
+            'headers': dict(self.request.headers)
         }
         return web.json_response(response_obj)
 
