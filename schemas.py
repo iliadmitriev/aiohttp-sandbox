@@ -1,9 +1,33 @@
 from marshmallow import Schema, fields, validate
 
-
 MALE = 'male'
 FEMALE = 'female'
 GENDERS = [MALE, FEMALE]
+
+
+class MyProfileSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    firstname = fields.String(
+        required=False,
+        validate=validate.Length(max=100)
+    )
+    surname = fields.String(
+        required=False,
+        validate=validate.Length(max=100)
+    )
+    user_id = fields.Integer(dump_only=True)
+    birthdate = fields.Date(required=False)
+    gender = fields.String(
+        required=False,
+        validate=validate.OneOf(choices=GENDERS)
+    )
+    avatar = fields.URL(
+        required=False,
+        validate=validate.Length(max=200)
+    )
+
+    class Meta:
+        strict = True
 
 
 class ProfileSchema(Schema):
@@ -26,3 +50,4 @@ class ProfileSchema(Schema):
 
 
 profile_schema = ProfileSchema()
+my_profile_schema = MyProfileSchema()
