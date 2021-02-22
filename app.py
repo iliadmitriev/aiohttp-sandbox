@@ -2,6 +2,7 @@ from aiohttp import web
 from routes import setup_routes
 from aiohttp_jinja2 import setup as setup_jinja2
 from aiohttp_swagger import setup_swagger
+from aiohttp_apispec import setup_aiohttp_apispec
 from jinja2 import FileSystemLoader
 import sys
 import logging
@@ -17,6 +18,14 @@ async def init_app(argv=None):
     setup_routes(app)
     setup_jinja2(app, loader=FileSystemLoader(BASE_PATH / 'templates'))
     setup_swagger(app, swagger_url="/api/v1/doc", ui_version=2)
+    setup_aiohttp_apispec(
+        app=app,
+        title="Profiles documentation",
+        version="v1",
+        url="/api/docs/swagger.json",
+        swagger_path="/api/docs",
+        static_path="/api/static"
+    )
     setup_middlewares(app)
     setup_db(app)
 
