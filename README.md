@@ -22,7 +22,8 @@ export $(cat .env | xargs)
 4. modules
 ```shell
 pip install aiohttp aiohttp-jinja2 aiohttp-swagger \
-    aiopg sqlalchemy marshmallow aiohttp_jwt
+    aiopg sqlalchemy marshmallow aiohttp_jwt \
+    aiohttp_apispec
 ```
 5. run
 ```shell
