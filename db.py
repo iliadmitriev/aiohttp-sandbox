@@ -38,6 +38,14 @@ async def get_object_by_id(conn, obj, pk):
     return record
 
 
+async def get_object_by_user_id(conn, obj, user_id):
+    result = await conn.execute(select([obj]).where(obj.user_id == user_id))
+    record = await result.first()
+    if not record:
+        raise RecordNotFound(f'{obj.__name__} with user_id={user_id} is not found')
+    return record
+
+
 async def update_object_by_id(conn, obj, pk, values):
     try:
         result = await conn.execute(
@@ -52,6 +60,23 @@ async def update_object_by_id(conn, obj, pk, values):
     if not record:
         raise RecordNotFound(f'{obj.__name__} with id={pk} is not found')
     return record
+
+
+async def update_object_by_user_id(conn, obj, user_id, values):
+    try:
+        result = await conn.execute(
+            update(obj)
+            .values(**values)
+            .where(obj.user_id == user_id)
+            .returning(*obj.__table__.columns)
+        )
+        record = await result.first()
+    except CompileError as e:
+        raise BadRequest(str(e))
+    if not record:
+        raise RecordNotFound(f'{obj.__name__} with user_id={user_id} is not found')
+    return record
+
 
 
 async def delete_object_by_id(conn, obj, pk):
@@ -81,4 +106,3 @@ async def insert_object(conn, obj, values):
         raise BadRequest(str(e))
 
     return record
-
