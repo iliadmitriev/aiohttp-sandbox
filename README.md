@@ -6,6 +6,7 @@ source venv/bin/activate
 2. create `.env` file
 ```shell
 cat > .env << __ENV
+JWT_SECRET_KEY=testsecretkey
 ENGINE=postgres
 POSTGRES_HOST=192.168.10.1
 POSTGRES_PORT=5433
@@ -20,7 +21,8 @@ export $(cat .env | xargs)
 ```   
 4. modules
 ```shell
-pip install aiohttp aiohttp-jinja2 aiohttp-swagger aiopg sqlalchemy marshmallow
+pip install aiohttp aiohttp-jinja2 aiohttp-swagger \
+    aiopg sqlalchemy marshmallow aiohttp_jwt
 ```
 5. run
 ```shell
