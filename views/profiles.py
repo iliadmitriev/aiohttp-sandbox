@@ -1,7 +1,13 @@
 from aiohttp import web
 from aiohttp_jwt import check_permissions, match_any, login_required
 from models import Profile
-from schemas import profile_schema, my_profile_schema
+from schemas import (
+    profile_schema,
+    my_profile_schema,
+    MyProfileSchema,
+    ProfileSchema,
+    default_profile_responses
+    )
 from db import (
     get_objects,
     get_object_by_id,
@@ -11,9 +17,36 @@ from db import (
     insert_object,
     delete_object_by_id
 )
+from aiohttp_apispec import (
+    docs,
+    request_schema,
+    response_schema
+)
+
+default_parameters = [{
+    'in': 'header',
+    'name': 'Authorization',
+    'type': 'string',
+    'format': 'Bearer',
+    'required': 'true'
+}]
 
 
 class MyProfileView(web.View):
+    @response_schema(MyProfileSchema())
+    @docs(
+        tags=['authorized'],
+        summary="Personal profile get method",
+        description="This method is used by unprivileged "
+                    "users to get their profiles",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            200: {
+                "description": "Success",
+                "schema": MyProfileSchema(),
+            },
+        }
+    )
     @login_required
     async def get(self):
         async with self.request.app['db'].acquire() as conn:
@@ -22,6 +55,20 @@ class MyProfileView(web.View):
             result = my_profile_schema.dump(profile)
             return web.json_response(result)
 
+    @docs(
+        tags=['authorized'],
+        summary="Personal profile create method",
+        description="This method is used by unprivileged "
+                    "users only once to create their profiles",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            201: {
+                "description": "Success",
+                "schema": MyProfileSchema()
+            },
+        }
+    )
+    @request_schema(MyProfileSchema())
     @login_required
     async def post(self):
         async with self.request.app['db'].acquire() as conn:
@@ -35,6 +82,20 @@ class MyProfileView(web.View):
             result = my_profile_schema.dump(profile)
             return web.json_response(result, status=201)
 
+    @docs(
+        tags=['authorized'],
+        summary="Personal profile partial update method",
+        description="This method is used by unprivileged "
+                    "users for partial data update in their profiles",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            200: {
+                "description": "Success",
+                "schema": MyProfileSchema(),
+            },
+        }
+    )
+    @request_schema(MyProfileSchema())
     @login_required
     async def patch(self):
         async with self.request.app['db'].acquire() as conn:
@@ -51,6 +112,20 @@ class MyProfileView(web.View):
 
 
 class ProfilesListView(web.View):
+    @docs(
+        tags=['superuser'],
+        summary="Profiles list method",
+        parameters=default_parameters,
+        description="This methods is used by administrators "
+                    "to get a list of users profiles",
+        responses=default_profile_responses | {
+            200: {
+                "description": "Success",
+                "schema": ProfileSchema(many=True),
+            },
+        }
+    )
+    @response_schema(ProfileSchema(many=True))
     @login_required
     @check_permissions('admin', 'scope', comparison=match_any)
     async def get(self):
@@ -59,6 +134,20 @@ class ProfilesListView(web.View):
             result = profile_schema.dump(profiles, many=True)
             return web.json_response(result)
 
+    @docs(
+        tags=['superuser'],
+        summary="Profiles create",
+        description="This methods is used by administrators "
+                    "to create users profiles",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            201: {
+                "description": "Success",
+                "schema": ProfileSchema(),
+            },
+        }
+    )
+    @request_schema(ProfileSchema())
     @login_required
     @check_permissions('admin', 'scope', comparison=match_any)
     async def post(self):
@@ -74,6 +163,20 @@ class ProfilesListView(web.View):
 
 
 class ProfilesDetailView(web.View):
+    @docs(
+        tags=['superuser'],
+        summary="Get profile details",
+        description="This methods is used by administrators "
+                    "to get users profile detail",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            200: {
+                "description": "Success",
+                "schema": ProfileSchema(),
+            },
+        }
+    )
+    @response_schema(ProfileSchema())
     @login_required
     @check_permissions('admin', 'scope', comparison=match_any)
     async def get(self):
@@ -83,8 +186,6 @@ class ProfilesDetailView(web.View):
             result = profile_schema.dump(profile)
             return web.json_response(result)
 
-    @login_required
-    @check_permissions('admin', 'scope', comparison=match_any)
     async def update(self, partial):
         async with self.request.app['db'].acquire() as conn:
             if self.request.content_type == 'application/json':
@@ -97,16 +198,60 @@ class ProfilesDetailView(web.View):
             result = profile_schema.dump(profile)
             return web.json_response(result)
 
+    @docs(
+        tags=['superuser'],
+        summary="Full update of all profile fields",
+        description="This methods is used by administrators "
+                    "to update users profiles",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            200: {
+                "description": "Success",
+                "schema": ProfileSchema(),
+            },
+        }
+    )
+    @request_schema(ProfileSchema())
+    @response_schema(ProfileSchema())
     @login_required
     @check_permissions('admin', 'scope', comparison=match_any)
     async def put(self):
         return await self.update(partial=False)
 
+    @docs(
+        tags=['superuser'],
+        summary="Partial update of profile fields",
+        description="This methods is used by administrators "
+                    "to update profiles",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            200: {
+                "description": "Success",
+                "schema": ProfileSchema(),
+            },
+        }
+    )
+    @request_schema(ProfileSchema())
+    @response_schema(ProfileSchema())
     @login_required
     @check_permissions('admin', 'scope', comparison=match_any)
     async def patch(self):
         return await self.update(partial=True)
 
+    @docs(
+        tags=['superuser'],
+        summary="Delete profiles",
+        description="This methods is used by administrators "
+                    "to delete users profiles",
+        parameters=default_parameters,
+        responses=default_profile_responses | {
+            200: {
+                "description": "Success",
+                "schema": ProfileSchema(),
+            },
+        }
+    )
+    @response_schema(ProfileSchema())
     @login_required
     @check_permissions('admin', 'scope', comparison=match_any)
     async def delete(self):
