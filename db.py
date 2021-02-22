@@ -78,7 +78,6 @@ async def update_object_by_user_id(conn, obj, user_id, values):
     return record
 
 
-
 async def delete_object_by_id(conn, obj, pk):
     try:
         result = await conn.execute(
