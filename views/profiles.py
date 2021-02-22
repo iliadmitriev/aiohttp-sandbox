@@ -57,7 +57,7 @@ class ProfilesListView(web.View):
         async with self.request.app['db'].acquire() as conn:
             profiles = await get_objects(conn, Profile)
             result = profile_schema.dump(profiles, many=True)
-            return web.json_response({'result': result, 'user': self.request['user']})
+            return web.json_response(result)
 
     @login_required
     @check_permissions('admin', 'scope', comparison=match_any)
