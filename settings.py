@@ -4,7 +4,13 @@ from os import environ as env
 
 BASE_PATH = pathlib.Path(__file__).parent
 
+
+APP_PORT = env.get('APP_PORT', 8080)
+APP_HOST = env.get('APP_HOST', '0.0.0.0')
+
 access_log_format = '%r %s %b %t "%a"'
+
+JWT_SECRET_KEY = env.get('JWT_SECRET_KEY')
 
 conf = {
     'engine': env.get('ENGINE'),
