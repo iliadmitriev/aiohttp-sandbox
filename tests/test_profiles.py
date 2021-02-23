@@ -1,9 +1,18 @@
-# tests/test_profiles
+from views.profiles import MyProfileView
 
 
 class TestProfileListAdmin:
-    def test_profiles_list_view_200(self):
-        assert True
+    async def test_profiles_list_view_401_unauthorized(self, cli):
+        resp = await cli.get('/profiles')
+        assert resp.status == 401
+
+    async def test_profiles_list_view_200_with_token(self, cli, admin_access_token):
+        headers = {
+            'Authorization': f'Bearer {admin_access_token}'
+        }
+        resp = await cli.get('/profiles', headers=headers)
+        print(resp)
+        assert resp.status == 200
 
     def test_profiles_list_view_create_201(self):
         assert True
