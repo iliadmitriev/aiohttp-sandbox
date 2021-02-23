@@ -1,13 +1,12 @@
 import aiopg.sa
 from sqlalchemy.sql import select, update, insert, delete
-from settings import dsn
 from exceptions import BadRequest, RecordNotFound
 from sqlalchemy.exc import CompileError
 
 
 async def init_pg(app):
     engine = await aiopg.sa.create_engine(
-        dsn=dsn
+        dsn=app['dsn']
     )
     app['db'] = engine
 
@@ -17,7 +16,8 @@ async def close_pg(app):
     await app['db'].wait_closed()
 
 
-def setup_db(app):
+def setup_db(app, dsn):
+    app['dsn'] = dsn
     app.on_startup.append(init_pg)
     app.on_cleanup.append(close_pg)
 

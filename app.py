@@ -9,7 +9,7 @@ import logging
 
 from db import setup_db
 from middlewares import setup_middlewares
-from settings import access_log_format, BASE_PATH, APP_PORT, APP_HOST
+from settings import dsn, access_log_format, BASE_PATH, APP_PORT, APP_HOST
 
 
 async def init_app(argv=None):
@@ -27,7 +27,7 @@ async def init_app(argv=None):
         static_path="/api/static"
     )
     setup_middlewares(app)
-    setup_db(app)
+    setup_db(app, dsn=dsn)
 
     return app
 
