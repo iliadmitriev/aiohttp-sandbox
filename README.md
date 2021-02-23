@@ -23,12 +23,16 @@ export $(cat .env | xargs)
 ```shell
 pip install aiohttp aiohttp-jinja2 aiohttp-swagger \
     aiopg sqlalchemy marshmallow aiohttp_jwt \
-    aiohttp_apispec
+    aiohttp_apispec pytest pytest-cov
 ```
 5. run
 ```shell
 python3 app.py
 ```
-6. links
+6. tests
+```shell
+pytest -v --cov=. --cov-report=term-missing
+```
+7. links
     * [API](http://localhost:8080/api/v1/doc)
     
