@@ -25,9 +25,6 @@ class Profile(Base):
     gender = Column('gender', String(10))
     avatar = Column('avatar', String(200))
 
-    def __repr__(self):
-        return f'{self.id}: {self.firstname} {self.surname}'
-
 
 class Config(Base):
     __tablename__ = 'config'
