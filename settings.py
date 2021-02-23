@@ -21,8 +21,6 @@ conf = {
     'port': env.get('POSTGRES_PORT', 5432)
 }
 
-if env.get('ENGINE') == 'postgres':
-    dsn = f'{conf["engine"]}://{conf["user"]}:{conf["password"]}'\
+dsn = f'{conf["engine"]}://{conf["user"]}:{conf["password"]}'\
         f'@{conf["host"]}:{conf["port"]}/{conf["database"]}'
-else:
-    dsn = 'sqlite:///:memory:'
+
