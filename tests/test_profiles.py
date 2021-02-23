@@ -4,16 +4,16 @@ from db import insert_object
 from schemas import profile_schema
 from views.profiles import Profile
 import json
+import pytest
 
 from tests.conftest import (
     get_admin_access_token,
-    create_and_migrate_test_db_dsn,
     get_unprivileged_access_token
 )
 
 
+@pytest.mark.usefixtures('dsn')
 class AioHTTPTestCaseWithTestDB(AioHTTPTestCase):
-    dsn = create_and_migrate_test_db_dsn()
     admin_access_token = get_admin_access_token(user_id=100)
     unprivileged_access_token = get_unprivileged_access_token(user_id=200)
     unprivileged_access_token_404 = get_unprivileged_access_token(user_id=404)
@@ -59,6 +59,7 @@ class TestProfileListAdmin(AioHTTPTestCaseWithTestDB):
         resp = await self.client.post('/profiles', headers=headers, data=data)
         assert resp.status == 201
 
+    @unittest_run_loop
     async def test_profiles_list_view_create_json_201(self):
         headers = {
             'Authorization': f'Bearer {self.admin_access_token}',
@@ -132,10 +133,10 @@ class TestProfileDetailAdmin(AioHTTPTestCaseWithTestDB):
             'Authorization': f'Bearer {self.admin_access_token}'
         }
         data = {
-                'firstname': 'ivan',
-                'surname': 'petrov',
-                'birthdate': '1990-02-04',
-                'user_id': 2003
+            'firstname': 'ivan',
+            'surname': 'petrov',
+            'birthdate': '1990-02-04',
+            'user_id': 2003
         }
         resp = await self.client.put(f'/profiles/{pr["id"]}', headers=headers, data=data)
         assert resp.status == 200
@@ -155,7 +156,7 @@ class TestProfileDetailAdmin(AioHTTPTestCaseWithTestDB):
             'Authorization': f'Bearer {self.admin_access_token}'
         }
         data = {
-                'birthdate': '1994-02-04',
+            'birthdate': '1994-02-04',
         }
         resp = await self.client.patch(f'/profiles/{pr["id"]}', headers=headers, data=data)
         assert resp.status == 200
