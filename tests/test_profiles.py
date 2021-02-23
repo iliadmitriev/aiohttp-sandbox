@@ -153,12 +153,16 @@ class TestProfileDetailAdmin(AioHTTPTestCaseWithTestDB):
             profile = await insert_object(conn, Profile, validated_data)
             pr = profile_schema.dump(profile)
         headers = {
-            'Authorization': f'Bearer {self.admin_access_token}'
+            'Authorization': f'Bearer {self.admin_access_token}',
+            'Content-Type': 'application/json'
         }
         data = {
             'birthdate': '1994-02-04',
         }
-        resp = await self.client.patch(f'/profiles/{pr["id"]}', headers=headers, data=data)
+        resp = await self.client.patch(
+            f'/profiles/{pr["id"]}', headers=headers,
+            data=json.dumps(data)
+        )
         assert resp.status == 200
 
     @unittest_run_loop
