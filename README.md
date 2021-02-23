@@ -23,7 +23,7 @@ export $(cat .env | xargs)
 ```shell
 pip install aiohttp aiohttp-jinja2 aiohttp-swagger \
     aiopg sqlalchemy marshmallow aiohttp_jwt \
-    aiohttp_apispec pytest pytest-cov
+    aiohttp_apispec pytest pytest-cov pytest-aiohttp
 ```
 5. run
 ```shell
