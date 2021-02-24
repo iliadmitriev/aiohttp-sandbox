@@ -35,8 +35,4 @@ pytest -v --cov=. --cov-report=term-missing
 ```
 7. links
     * [API](http://localhost:8080/api/v1/doc)
-
-
-https://github.com/iliadmitriev/aiohttp-sandbox/blob/19fc244634779841fcdd1f4573bd18f40da7900b/routes.py#L8-L11
-
     
