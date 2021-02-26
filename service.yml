@@ -23,6 +23,6 @@ spec:
   type: LoadBalancer
   ports:
     - port: 80
-      targetPort: 8000
+      targetPort: 8080
   selector:
     app: profile-1
