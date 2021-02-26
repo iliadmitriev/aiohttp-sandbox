@@ -5,6 +5,9 @@ from schemas import profile_schema
 from views.profiles import Profile
 import json
 import pytest
+from routes import setup_routes
+from middlewares import setup_middlewares
+from db import setup_db
 
 from tests.conftest import (
     get_admin_access_token,
@@ -12,16 +15,13 @@ from tests.conftest import (
 )
 
 
-@pytest.mark.usefixtures('dsn')
+@pytest.mark.usefixtures('get_dsn')
 class AioHTTPTestCaseWithTestDB(AioHTTPTestCase):
     admin_access_token = get_admin_access_token(user_id=100)
     unprivileged_access_token = get_unprivileged_access_token(user_id=200)
     unprivileged_access_token_404 = get_unprivileged_access_token(user_id=404)
 
     async def get_application(self):
-        from routes import setup_routes
-        from middlewares import setup_middlewares
-        from db import setup_db
         app = web.Application()
         setup_routes(app)
         setup_middlewares(app)
