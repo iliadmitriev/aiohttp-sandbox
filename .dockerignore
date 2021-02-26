@@ -1,0 +1,9 @@
+/.git/
+__pycache__/
+/db.sqlite3
+/.idea
+/locale/en/LC_MESSAGES/django.mo
+/locale/ru/LC_MESSAGES/django.mo
+/static/
+/.coverage
+/htmlcov/
