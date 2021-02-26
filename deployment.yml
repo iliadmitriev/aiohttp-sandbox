@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: profile-1
+  name: profile-1
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: profile-1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: profile-1
+    spec:
+      containers:
+      - env:
+          - name: JWT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: DJANGO_SECRET_KEY
+                name: auth-dj-secret-key
+          - name: POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_HOST
+                name: profile-db-credentials
+          - name: POSTGRES_PORT
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PORT
+                name: profile-db-credentials
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_DB
+                name: profile-db-credentials
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_USER
+                name: profile-db-credentials
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PASSWORD
+                name: profile-db-credentials
+        name: profile-sha256-01
+        image: gcr.io/PROJECT_ID/IMAGE:TAG
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: profile-1
+  name: profile-1-hpa
+  namespace: default
+spec:
+  maxReplicas: 5
+  metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 80
+      type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: profile-1
+
