@@ -13,11 +13,11 @@ access_log_format = '%r %s %b %t "%a"'
 JWT_SECRET_KEY = env.get('JWT_SECRET_KEY')
 
 conf = {
-    'engine': env.get('ENGINE'),
+    'engine': env.get('ENGINE', 'postgresql'),
     'database': env.get('POSTGRES_DB'),
     'user': env.get('POSTGRES_USER'),
     'password': env.get('POSTGRES_PASSWORD'),
-    'host': env.get('POSTGRES_HOST', 'localhost'),
+    'host': env.get('POSTGRES_HOST'),
     'port': env.get('POSTGRES_PORT', 5432)
 }
 
