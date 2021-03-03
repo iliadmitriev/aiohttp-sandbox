@@ -48,11 +48,17 @@ docker run -d -p 5433:5432 --name profile-postgres --env-file .env postgres:13.2
 ```
 5. run docker image as daemon
 ```shell
-docker run --rm -d -p 8080:8080 --env-file .env profile-api
+docker run --rm -d -p 8080:8080 --env-file .env --name profile-api profile-api
 ```
 6. attach to db container and create schema
 ```shell
-```
+docker exec -i profile-api python <<-__CODE__
+from sqlalchemy import create_engine
+from settings import dsn
+from models import Base
+engine = create_engine(dsn)
+Base.metadata.create_all(engine)
+__CODE__```
 
 
 # useful links
