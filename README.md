@@ -41,12 +41,13 @@ pytest -v --cov=. --cov-report=term-missing
 ```shell
 docker build -f Dockerfile -t profile-test ./
 ```
-3. run docker image as daemon
+3. setup `.env` file (p.2)
+4. run docker image as daemon
 ```shell
-docker run --rm -d -p 8080:8080 profile-test
+docker run --rm -d -p 8080:8080 --env-file .env profile-test
 ```
 
 
-7. links
+# useful links
     * [API](http://localhost:8080/api/v1/doc)
     
