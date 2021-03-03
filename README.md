@@ -42,9 +42,16 @@ pytest -v --cov=. --cov-report=term-missing
 docker build -f Dockerfile -t profile-test ./
 ```
 3. setup `.env` file (p.2)
-4. run docker image as daemon
+4. create docker instance of postgres 
 ```shell
-docker run --rm -d -p 8080:8080 --env-file .env profile-test
+docker run -d -p 5433:5432 --name profile-postgres --env-file .env postgres:13.2-alpine
+```
+5. run docker image as daemon
+```shell
+docker run --rm -d -p 8080:8080 --env-file .env profile-api
+```
+6. attach to db container and create schema
+```shell
 ```
 
 
