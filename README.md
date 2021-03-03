@@ -50,7 +50,7 @@ docker run -d -p 5433:5432 --name profile-postgres --env-file .env postgres:13.2
 ```shell
 docker run --rm -d -p 8080:8080 --env-file .env --name profile-api profile-api
 ```
-6. attach to db container and create schema
+6. attach to api container and create schema
 ```shell
 docker exec -i profile-api python <<-__CODE__
 from sqlalchemy import create_engine
