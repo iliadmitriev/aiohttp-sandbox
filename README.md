@@ -33,6 +33,20 @@ python3 app.py
 ```shell
 pytest -v --cov=. --cov-report=term-missing
 ```
+
+# Build and run docker
+
+1. install docker
+2. build image
+```shell
+docker build -f Dockerfile -t profile-test ./
+```
+3. run docker image as daemon
+```shell
+docker run --rm -d -p 8080:8080 profile-test
+```
+
+
 7. links
     * [API](http://localhost:8080/api/v1/doc)
     
