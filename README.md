@@ -35,4 +35,4 @@ pytest -v --cov=. --cov-report=term-missing
 ```
 7. links
     * [API](http://localhost:8080/api/v1/doc)
-    
+    * [API docs](http://localhost:8080/api/doc)
