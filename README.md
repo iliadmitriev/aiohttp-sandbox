@@ -61,7 +61,6 @@ Base.metadata.create_all(engine)
 __CODE__
 ```
 
-
 # useful links
     * [API](http://localhost:8080/api/v1/doc)
     * [API docs](http://localhost:8080/api/doc)
