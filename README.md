@@ -1,4 +1,4 @@
-1. python3
+1. Install python3 virtual environment
 ```shell
 python3 -m venv venv
 source venv/bin/activate
