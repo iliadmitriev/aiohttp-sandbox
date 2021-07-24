@@ -1,3 +1,6 @@
+[![CI unittests](https://github.com/iliadmitriev/aiohttp-sandbox/actions/workflows/python-app.yml/badge.svg)](https://github.com/iliadmitriev/aiohttp-sandbox/actions/workflows/python-app.yml)
+[![codecov](https://codecov.io/gh/iliadmitriev/aiohttp-sandbox/branch/master/graph/badge.svg?token=9YWCFW4MXZ)](https://codecov.io/gh/iliadmitriev/aiohttp-sandbox)
+
 1. Install python3 virtual environment
 ```shell
 python3 -m venv venv
