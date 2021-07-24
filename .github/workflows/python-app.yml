@@ -23,6 +23,10 @@ jobs:
     services:
       postgres:
         image: postgres:13.3-alpine
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_USER: profile
+          POSTGRES_DB: profile
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
